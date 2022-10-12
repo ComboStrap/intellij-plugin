@@ -25,11 +25,19 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileType name="Wiki" implementationClass="com.combostrap.intellij.markups.wiki.WikiFileType" fieldName="INSTANCE"
-                  language="Wiki" extensions="wiki"/>
+        <fileType name="Wiki"
+                  implementationClass="com.combostrap.intellij.markups.wiki.WikiFileType"
+                  fieldName="INSTANCE"
+                  language="Wiki"
+                  extensions="wiki"/>
         <lang.parserDefinition
                 language="Wiki"
                 implementationClass="com.combostrap.intellij.markups.wiki.WikiParserDefinition"/>
+        <lang.syntaxHighlighterFactory
+                language="Wiki"
+                implementationClass="com.combostrap.intellij.markups.wiki.WikiSyntaxHighlighterFactory"/>
+        <colorSettingsPage
+                implementation="com.combostrap.intellij.markups.wiki.WikiSyntaxHighlighterColorSettings"/>
     </extensions>
 
 

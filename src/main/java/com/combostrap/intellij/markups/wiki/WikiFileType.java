@@ -1,9 +1,7 @@
 package com.combostrap.intellij.markups.wiki;
 
-import com.combostrap.intellij.markups.Icons;
+import com.combostrap.intellij.markups.MarkupIcons;
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.util.NlsContexts.Label;
-import com.intellij.openapi.util.NlsSafe;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +33,7 @@ public class WikiFileType extends LanguageFileType {
 
     @Override
     public @Nullable Icon getIcon() {
-        return Icons.WIKI;
+        return MarkupIcons.WIKI;
     }
 
 
