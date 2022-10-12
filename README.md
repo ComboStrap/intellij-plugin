@@ -1,13 +1,25 @@
-# intellij-plugin
+# ComboStrap Intellij Plugin
 
 ![Build](https://github.com/ComboStrap/intellij-plugin/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
+
+To continue: https://plugins.jetbrains.com/docs/intellij/registering-file-type.html#additional-features
+
 ## Template ToDo list
+
+Followed: https://plugins.jetbrains.com/docs/intellij/custom-language-support.html#topics
+
+
+Followed: https://github.com/JetBrains/intellij-sdk-code-samples/tree/main/simple_language_plugin
+
+
+
+See also: https://github.com/JetBrains/intellij-community/tree/master/plugins/markdown
+
 - [x] Create a new [IntelliJ Platform Plugin Template][template] project.
 - [ ] Get familiar with the [template documentation][template].
-- [ ] Verify the [pluginGroup](./gradle.properties), [plugin ID](./src/main/resources/META-INF/plugin.xml) and [sources package](./src/main/kotlin).
 - [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html).
 - [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
 - [ ] Set the Plugin ID in the above README badges.

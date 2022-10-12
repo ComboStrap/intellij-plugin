@@ -1,18 +1,33 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.gerardnico.intellijplugin</id>
-    <name>intellij-plugin</name>
-    <vendor>gerardnico</vendor>
+    <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
+    <id>com.combostrap.intellij.markups</id>
+    <!-- Text to display as name on Preferences/Settings | Plugin page -->
+    <name>Markups (Markdown, Wiki, ...)</name>
+    <!-- Text to display as company information on Preferences/Settings | Plugin page -->
+    <vendor url="https://combostrap.com">Combostrap</vendor>
+
+    <description>
+        <![CDATA[
+      Markup languages support
+      <br>
+      From Wiki to Markdown
+    ]]>
+    </description>
+    <change-notes>
+        <![CDATA[
+      <ul>
+        <li><b>1.0.0</b> First release</li>
+      </ul>
+    ]]>
+    </change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.gerardnico.intellijplugin.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.gerardnico.intellijplugin.services.MyProjectService"/>
+        <fileType name="Wiki" implementationClass="com.combostrap.intellij.markups.WikiFileType" fieldName="INSTANCE"
+                  language="Wiki" extensions="wiki"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.gerardnico.intellijplugin.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+
 </idea-plugin>
