@@ -1,4 +1,4 @@
-package com.combostrap.intellij.markups;
+package com.combostrap.intellij.markups.wiki;
 
 import com.intellij.lang.Language;
 

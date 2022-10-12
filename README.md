@@ -5,9 +5,34 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
 
-To continue: https://plugins.jetbrains.com/docs/intellij/registering-file-type.html#additional-features
+
+## File Registration
+
+* [FileType Registration](https://plugins.jetbrains.com/docs/intellij/registering-file-type.html#additional-features)
+
+## Lexer
+
+[Lexer](https://plugins.jetbrains.com/docs/intellij/implementing-lexer.html#lexer-state)
+
+The lexical analyzer defines how the contents of a file are broken into tokens
+
+An essential requirement for a syntax highlighting lexer is that its state must be represented by 
+a single integer number returned from `Lexer.getState()`. 
+
+That state will be passed to the `Lexer.start()` method, along with the start offset of the fragment to process, 
+when lexing is resumed from the middle of a file. 
+
+Lexers used in other contexts can always return 0 from getState().
+
+## AST
+
+The PsiFileBase is the top-level node of the tree of PsiElements
+
+Tool > View PsiStructure: With the PsiViewer tool window, you can check how the lexer breaks 
+the content of the file into tokens, and the parser transforms the tokens into PSI elements.
 
 ## Template ToDo list
+
 
 Followed: https://plugins.jetbrains.com/docs/intellij/custom-language-support.html#topics
 

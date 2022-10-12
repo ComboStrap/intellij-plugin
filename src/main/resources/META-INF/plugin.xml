@@ -25,8 +25,11 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileType name="Wiki" implementationClass="com.combostrap.intellij.markups.WikiFileType" fieldName="INSTANCE"
+        <fileType name="Wiki" implementationClass="com.combostrap.intellij.markups.wiki.WikiFileType" fieldName="INSTANCE"
                   language="Wiki" extensions="wiki"/>
+        <lang.parserDefinition
+                language="Wiki"
+                implementationClass="com.combostrap.intellij.markups.wiki.WikiParserDefinition"/>
     </extensions>
 
 

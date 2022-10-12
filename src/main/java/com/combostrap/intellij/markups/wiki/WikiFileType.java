@@ -1,5 +1,6 @@
-package com.combostrap.intellij.markups;
+package com.combostrap.intellij.markups.wiki;
 
+import com.combostrap.intellij.markups.Icons;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.NlsContexts.Label;
 import com.intellij.openapi.util.NlsSafe;

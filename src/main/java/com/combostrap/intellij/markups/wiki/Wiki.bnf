@@ -1,0 +1,20 @@
+{
+  parserClass="com.combostrap.intellij.markups.wiki.parser.WikiParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Wiki"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.combostrap.intellij.markups.wiki.psi"
+  psiImplPackage="com.combostrap.intellij.markups.wiki.psi.impl"
+
+  elementTypeHolderClass="com.combostrap.intellij.markups.wiki.WikiTypes"
+  elementTypeClass="com.combostrap.intellij.markups.wiki.WikiElement"
+  tokenTypeClass="com.combostrap.intellij.markups.wiki.WikiToken"
+}
+
+wikiFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY
