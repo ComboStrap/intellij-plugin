@@ -6,6 +6,6 @@ import javax.swing.*;
 
 public class Icons {
 
-    public static final Icon WIKI = IconLoader.getIcon("/icons/wiki.png", Icons.class);
+    public static final Icon WIKI = IconLoader.getIcon("/icons/wiki.svg", Icons.class);
 
 }
