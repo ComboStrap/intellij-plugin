@@ -1,6 +1,7 @@
 // This is a generated file. Not intended for manual editing.
 package com.combostrap.intellij.markups.wiki;
 
+import com.combostrap.intellij.markups.MarkupToken;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
@@ -10,11 +11,11 @@ public interface WikiTypes {
 
   IElementType PROPERTY = new WikiElement("PROPERTY");
 
-  IElementType COMMENT = new WikiToken("COMMENT");
-  IElementType CRLF = new WikiToken("CRLF");
-  IElementType KEY = new WikiToken("KEY");
-  IElementType SEPARATOR = new WikiToken("SEPARATOR");
-  IElementType VALUE = new WikiToken("VALUE");
+  IElementType COMMENT = new MarkupToken("COMMENT");
+  IElementType CRLF = new MarkupToken("CRLF");
+  IElementType KEY = new MarkupToken("KEY");
+  IElementType SEPARATOR = new MarkupToken("SEPARATOR");
+  IElementType VALUE = new MarkupToken("VALUE");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

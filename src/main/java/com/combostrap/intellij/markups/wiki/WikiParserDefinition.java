@@ -1,6 +1,8 @@
 package com.combostrap.intellij.markups.wiki;
 
-import com.combostrap.intellij.markups.wiki.parser.WikiParser;
+import com.combostrap.intellij.markups.MarkupLexer;
+import com.combostrap.intellij.markups.MarkupParser;
+import com.combostrap.intellij.markups.MarkupTypes;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
@@ -17,15 +19,16 @@ public class WikiParserDefinition implements ParserDefinition {
 
     public static final IFileElementType FILE = new IFileElementType(WikiLanguage.INSTANCE);
 
+    TokenSet COMMENTS = TokenSet.create(WikiTypes.COMMENT);
 
     @Override
     public @NotNull Lexer createLexer(Project project) {
-        return new WikiLexerAdapter();
+        return new MarkupLexer();
     }
 
     @Override
     public @NotNull PsiParser createParser(Project project) {
-        return new WikiParser();
+        return new MarkupParser();
     }
 
     @Override
@@ -35,7 +38,9 @@ public class WikiParserDefinition implements ParserDefinition {
 
     @Override
     public @NotNull TokenSet getCommentTokens() {
-        return WikiTokenSets.COMMENTS;
+
+        return COMMENTS;
+
     }
 
     @Override
@@ -45,7 +50,7 @@ public class WikiParserDefinition implements ParserDefinition {
 
     @Override
     public @NotNull PsiElement createElement(ASTNode node) {
-        return WikiTypes.Factory.createElement(node);
+        return MarkupTypes.Factory.createElement(node);
     }
 
     @Override

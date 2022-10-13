@@ -10,19 +10,7 @@
 
 * [FileType Registration](https://plugins.jetbrains.com/docs/intellij/registering-file-type.html#additional-features)
 
-## Lexer
 
-[Lexer](https://plugins.jetbrains.com/docs/intellij/implementing-lexer.html#lexer-state)
-
-The lexical analyzer defines how the contents of a file are broken into tokens
-
-An essential requirement for a syntax highlighting lexer is that its state must be represented by 
-a single integer number returned from `Lexer.getState()`. 
-
-That state will be passed to the `Lexer.start()` method, along with the start offset of the fragment to process, 
-when lexing is resumed from the middle of a file. 
-
-Lexers used in other contexts can always return 0 from getState().
 
 ## AST
 

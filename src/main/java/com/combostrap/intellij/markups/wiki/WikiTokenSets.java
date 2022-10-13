@@ -7,7 +7,7 @@ import com.intellij.psi.tree.TokenSet;
  */
 public interface WikiTokenSets {
 
-    TokenSet IDENTIFIERS = TokenSet.create(WikiTypes.KEY);
+
 
     TokenSet COMMENTS = TokenSet.create(WikiTypes.COMMENT);
 
