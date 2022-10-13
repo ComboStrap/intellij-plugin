@@ -1,5 +1,6 @@
 {
   parserClass="com.combostrap.intellij.markups.wiki.parser.WikiParser"
+  parserUtilClass="com.combostrap.intellij.markups.wiki.parser.WikiParserUtil"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -11,10 +12,21 @@
   elementTypeHolderClass="com.combostrap.intellij.markups.wiki.WikiTypes"
   elementTypeClass="com.combostrap.intellij.markups.wiki.WikiElement"
   tokenTypeClass="com.combostrap.intellij.markups.wiki.WikiToken"
+
+  psiImplUtilClass="com.combostrap.intellij.markups.wiki.WikiPsiImplUtil"
+
 }
 
 wikiFile ::= item_*
 
 private item_ ::= (property|COMMENT|CRLF)
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+property ::= (KEY? SEPARATOR VALUE?) | KEY {
+  pin=3
+  recoverWhile="recover_property"
+  mixin="com.combostrap.intellij.markups.wiki.WikiNamedElementImpl"
+  implements="com.combostrap.intellij.markups.wiki.WikiNamedElement"
+  methods=[getKey getValue getName setName getNameIdentifier getPresentation]
+}
+
+private recover_property ::= !(KEY|SEPARATOR|COMMENT)
