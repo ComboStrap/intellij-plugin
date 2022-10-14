@@ -1,6 +1,8 @@
 package com.combostrap.intellij.markups;
 
 import com.combostrap.intellij.markups.wiki.WikiLexer;
+import com.intellij.lang.impl.TokenSequence;
+import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.psi.tree.IElementType;
 import com.nobigsoftware.dfalex.DfaBuilder;
 import com.nobigsoftware.dfalex.DfaState;
@@ -22,31 +24,49 @@ public class MarkupLexerTest extends TestCase {
 
     public void testRegexp() throws IOException {
 
-        WikiLexer wikiLexer = new WikiLexer(null);
-        Path path = Paths.get("src","test","testData","Base.wiki");
-        if(!Files.exists(path)){
+        MarkupLexer myLexer = new MarkupLexer();
+        Path path = Paths.get("src", "test", "testData", "Base.wiki");
+        if (!Files.exists(path)) {
             throw new FileNotFoundException(path.toAbsolutePath().toString());
         }
-
         CharSequence result = Files.readString(path);
-        wikiLexer.reset(result,0,result.length(),0);
-        List<IElementType> tokens = new ArrayList<>();
-        List<CharSequence> texts = new ArrayList<>();
-        while (true){
-            IElementType token = wikiLexer.advance();
-            if(token==null){
-                break;
-            }
-            tokens.add(token);
-            CharSequence text = wikiLexer.yytext();
-            texts.add(text);
+
+        /**
+         * Code from {@link TokenSequence#Builder}
+         */
+        myLexer.start(result);
+        int i = 0;
+        List<Integer> myLexStarts = new ArrayList<>();
+        List<String> myLexCaptures = new ArrayList<>();
+        List<IElementType> myLexTypes = new ArrayList<>();
+        while (true) {
+            IElementType type = myLexer.getTokenType();
+            if (type == null) break;
+
+            if (i % 20 == 0) ProgressIndicatorProvider.checkCanceled();
+
+            int tokenStart = myLexer.getTokenStart();
+            int tokenEnd = myLexer.getTokenEnd();
+            myLexStarts.add(tokenStart);
+            myLexTypes.add(type);
+            String tokenText = myLexer.getTokenText();
+            myLexCaptures.add(tokenText);
+            i++;
+            myLexer.advance();
         }
+        myLexStarts.add(result.length());
+
+        /**
+         * Test
+         */
+        assertEquals(3, myLexTypes.size());
+
 
     }
 
     /**
      * http://mtimmerm.github.io/dfalex/
-     *
+     * <p>
      * Regex: Expression:
      * https://github.com/mtimmerm/dfalex/blob/master/src/com/nobigsoftware/dfalex/RegexParser.java
      */
@@ -54,14 +74,14 @@ public class MarkupLexerTest extends TestCase {
         DfaState<Integer> dfa;
         {
             DfaBuilder<Integer> builder = new DfaBuilder<>();
-            builder.addPattern(Pattern.regex("cc"), 1);
+            builder.addPattern(Pattern.regex("=|==|===|====|=====|======"), 1);
             builder.addPattern(Pattern.regex("aa"), 2);
             dfa = builder.build(null);
         }
-        StringMatcher matcher = new StringMatcher("bbbbbaabbbbabbbba");
-        while(true) {
+        StringMatcher matcher = new StringMatcher("== Hallo ===");
+        while (true) {
             Integer result = matcher.findNext(dfa);
-            if(result==null){
+            if (result == null) {
                 break;
             }
             Assert.assertEquals((Integer) 2, result);

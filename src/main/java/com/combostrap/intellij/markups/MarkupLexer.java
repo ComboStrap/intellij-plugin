@@ -4,10 +4,7 @@ import com.combostrap.intellij.markups.wiki.WikiToken;
 import com.intellij.lexer.Lexer;
 import com.intellij.lexer.LexerBase;
 import com.intellij.psi.tree.IElementType;
-import com.nobigsoftware.dfalex.DfaBuilder;
-import com.nobigsoftware.dfalex.DfaState;
-import com.nobigsoftware.dfalex.Pattern;
-import com.nobigsoftware.dfalex.StringMatcher;
+import com.nobigsoftware.dfalex.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,19 +34,36 @@ public class MarkupLexer extends LexerBase {
      */
     private int initialState;
 
-    private static final int WIKI_HEADING = 1;
+    private static final int WIKI_HEADING_1 = 1;
+    private static final int WIKI_HEADING_2 = 2;
+    private static final int WIKI_HEADING_3 = 3;
+    private static final int WIKI_HEADING_4 = 4;
+    private static final int EOL = 5;
+    private static final int TEXT = 6;
+    private static final int WS = 7;
 
     private static final DfaState<Integer> dfa;
 
+
     static {
         DfaBuilder<Integer> builder = new DfaBuilder<>();
-        builder.addPattern(Pattern.regex("={1,6}"), WIKI_HEADING);
+        builder.addPattern(Pattern.regex("======"), WIKI_HEADING_1);
+        builder.addPattern(Pattern.regex("====="), WIKI_HEADING_2);
+        builder.addPattern(Pattern.regex("===="), WIKI_HEADING_3);
+        builder.addPattern(Pattern.regex("==="), WIKI_HEADING_4);
+        builder.addPattern(Pattern.regex("\r|\n|\r\n"), EOL);
+        builder.addPattern(Pattern.regex("[^\r\n]*"), TEXT);
+        //  builder.addPattern(Pattern.regex("[ \t\f]"), WS);
+        DfaAmbiguityResolver<Integer> dfaAmbiguityResolver = integers -> integers
+                .stream().max(Integer::compare)
+                .orElse(null);
+        dfa = builder.build(dfaAmbiguityResolver);
 
-        dfa = builder.build(null);
     }
 
     private StringMatcher matcher;
     private Integer state;
+    private WikiToken actualToken = null;
 
 
     @Override
@@ -62,17 +76,27 @@ public class MarkupLexer extends LexerBase {
 
 
         this.matcher = new StringMatcher(String.valueOf(buffer));
-        this.matcher.setPositions(startOffset, endOffset, Integer.MAX_VALUE);
+        //this.matcher.setPositions(startOffset, endOffset, Integer.MAX_VALUE);
 
     }
 
     /**
-     * A lexical state that can be used in the lexical rules by the parser
-     *
-     * (Generally to say when you enter a container, I'm inside)
-     *
-     * In Flex, the state is advertised with `yybegin(state)`
-     *
+     * The lexical state is an extra state to create the lexical rules.
+     * <p>
+     * In a lexer grammar, in addition to regular expression matches,
+     * you  can use lexical states to refine a specification.
+     * <p>
+     * They act like a condition for a regular expression (called also a start condition)
+     * <p>
+     * <p>
+     * <p>
+     * In [JFlex](https://jflex.de/manual.html#ExampleLexRules) for instance:
+     * * if the scanner is in lexical state FOO, only expressions that are preceded by the start condition <FOO> can be matched
+     * * the lexical state YYINITIAL is the state in which the lexer begins scanning.
+     * * if a regular expression has no start conditions it is matched in all lexical states.
+     * * a start condition of a regular expression can contain more than one lexical state. It is then matched when the lexer is in any of these lexical states.
+     * * the state is advertised with `yybegin(state)`
+     * <p>
      * For Xml, for instance: `yybegin(CDATA)`
      * https://github.com/JetBrains/intellij-community/blob/master/xml/xml-psi-impl/src/com/intellij/lexer/_XmlLexer.flex
      */
@@ -85,7 +109,7 @@ public class MarkupLexer extends LexerBase {
 
     /**
      * Returns the token at the current position of the lexer or {@code null} if lexing is finished.
-     *
+     * <p>
      * This function is called first (to get the document element i assume), then {@link #advance()}
      * See {@link com.intellij.lang.impl.TokenSequence#performLexing(CharSequence, Lexer)}
      *
@@ -95,15 +119,8 @@ public class MarkupLexer extends LexerBase {
     @Override
     public @Nullable IElementType getTokenType() {
 
-        if(this.state==null){
-            return null;
-        }
-        switch (state){
-            case WIKI_HEADING:
-                return new WikiToken("HEADING");
-            default:
-                throw new IllegalStateException("Unexpected value: " + state);
-        }
+        if (this.actualToken == null) this.advance();
+        return this.actualToken;
 
     }
 
@@ -127,8 +144,7 @@ public class MarkupLexer extends LexerBase {
     @Override
     public int getTokenEnd() {
 
-
-        return this.endOffset;
+        return this.matcher.getLastMatchEnd();
     }
 
     /**
@@ -138,7 +154,29 @@ public class MarkupLexer extends LexerBase {
     public void advance() {
 
         this.state = matcher.findNext(dfa);
-
+        if (state == null) {
+            this.actualToken = null;
+            return;
+        }
+        switch (state) {
+            case WIKI_HEADING_1:
+            case WIKI_HEADING_2:
+            case WIKI_HEADING_3:
+            case WIKI_HEADING_4:
+                this.actualToken = new WikiToken("HEADING");
+                break;
+            case EOL:
+                this.actualToken = new WikiToken("EOL");
+                break;
+            case TEXT:
+                this.actualToken = new WikiToken("TEXT");
+                break;
+            case WS:
+                this.actualToken = new WikiToken("WHITESPACE");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + state);
+        }
 
     }
 
