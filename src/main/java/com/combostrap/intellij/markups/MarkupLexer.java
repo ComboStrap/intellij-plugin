@@ -66,6 +66,16 @@ public class MarkupLexer extends LexerBase {
 
     }
 
+    /**
+     * A lexical state that can be used in the lexical rules by the parser
+     *
+     * (Generally to say when you enter a container, I'm inside)
+     *
+     * In Flex, the state is advertised with `yybegin(state)`
+     *
+     * For Xml, for instance: `yybegin(CDATA)`
+     * https://github.com/JetBrains/intellij-community/blob/master/xml/xml-psi-impl/src/com/intellij/lexer/_XmlLexer.flex
+     */
     @Override
     public int getState() {
 
