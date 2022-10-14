@@ -10,9 +10,10 @@ public class MarkupParserTest extends ParsingTestCase {
 
     /**
      * This is a test to run
-     * Note that 'ParsingTestData' is the name of the searched file
+     * Note that 'Base' is the name of the searched file
      *
      * This function will load the `Base.wiki` file
+     * from the {@link #getTestDataPath() test data path}
      */
     public void testBase() {
         doTest(true);

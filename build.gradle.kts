@@ -18,6 +18,10 @@ plugins {
 group = properties("pluginGroup")
 version = properties("pluginVersion")
 
+dependencies {
+    implementation("com.nobigsoftware:dfalex:1.0.1")
+}
+
 sourceSets["main"].java.srcDirs("src/main/gen")
 
 // Configure project's dependencies
@@ -26,7 +30,7 @@ repositories {
 }
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
-java  {
+java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }

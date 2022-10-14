@@ -1,6 +1,5 @@
 {
   parserClass="com.combostrap.intellij.markups.wiki.parser.WikiParser"
-  parserUtilClass="com.combostrap.intellij.markups.wiki.parser.WikiParserUtil"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -11,7 +10,7 @@
 
   elementTypeHolderClass="com.combostrap.intellij.markups.wiki.WikiTypes"
   elementTypeClass="com.combostrap.intellij.markups.wiki.WikiElement"
-  tokenTypeClass="com.combostrap.intellij.markups.MarkupToken"
+  tokenTypeClass="com.combostrap.intellij.markups.wiki.WikiToken"
 
   psiImplUtilClass="com.combostrap.intellij.markups.wiki.WikiPsiImplUtil"
 

@@ -3,6 +3,7 @@ package com.combostrap.intellij.markups.wiki;
 import com.combostrap.intellij.markups.MarkupLexer;
 import com.combostrap.intellij.markups.MarkupParser;
 import com.combostrap.intellij.markups.MarkupTypes;
+import com.combostrap.intellij.markups.wiki.parser.WikiParser;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
@@ -28,7 +29,9 @@ public class WikiParserDefinition implements ParserDefinition {
 
     @Override
     public @NotNull PsiParser createParser(Project project) {
+
         return new MarkupParser();
+
     }
 
     @Override
