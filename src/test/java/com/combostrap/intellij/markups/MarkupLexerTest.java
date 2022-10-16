@@ -1,7 +1,7 @@
 package com.combostrap.intellij.markups;
 
-import com.combostrap.intellij.markups.wiki.WikiLexer;
 import com.intellij.lang.impl.TokenSequence;
+import com.intellij.lexer.Lexer;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.psi.tree.IElementType;
 import com.nobigsoftware.dfalex.DfaBuilder;
@@ -21,8 +21,10 @@ import java.util.List;
 
 public class MarkupLexerTest extends TestCase {
 
-
-    public void testRegexp() throws IOException {
+    /**
+     * Code from {@link TokenSequence#performLexing(CharSequence, Lexer)}
+     */
+    public void testLexingAsIdea() throws IOException {
 
         MarkupLexer myLexer = new MarkupLexer();
         Path path = Paths.get("src", "test", "testData", "Base.wiki");
@@ -31,9 +33,7 @@ public class MarkupLexerTest extends TestCase {
         }
         CharSequence result = Files.readString(path);
 
-        /**
-         * Code from {@link TokenSequence#Builder}
-         */
+
         myLexer.start(result);
         int i = 0;
         List<Integer> myLexStarts = new ArrayList<>();
@@ -70,7 +70,7 @@ public class MarkupLexerTest extends TestCase {
      * Regex: Expression:
      * https://github.com/mtimmerm/dfalex/blob/master/src/com/nobigsoftware/dfalex/RegexParser.java
      */
-    public void testDfaLex() {
+    public void testDfaBuilderMultipleRegex() {
         DfaState<Integer> dfa;
         {
             DfaBuilder<Integer> builder = new DfaBuilder<>();
@@ -92,6 +92,11 @@ public class MarkupLexerTest extends TestCase {
             int end = matcher.getLastMatchEnd();
             Assert.assertEquals(8, end);
         }
+
+    }
+
+    public void testRegex() {
+        Pattern regex = Pattern.regex("a");
 
     }
 }

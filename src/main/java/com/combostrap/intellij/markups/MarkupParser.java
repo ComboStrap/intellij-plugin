@@ -51,6 +51,15 @@ public class MarkupParser implements PsiParser {
      * @param builder the builder which is used to retrieve the original file tokens and build the AST tree.
      * @return the root of the resulting AST tree.
      *
+     *
+     * Let op ! PSIbuilder
+     * https://plugins.jetbrains.com/docs/intellij/implementing-parser-and-psi.html#whitespace-and-comments
+     * An essential feature of PsiBuilder is its handling of whitespace and comments.
+     * The types of tokens which are treated as whitespace or comments are defined by getWhitespaceTokens()
+     * and getCommentTokens() in ParserDefinition.
+     * PsiBuilder automatically omits whitespace and comment tokens from the stream of tokens
+     * it passes to PsiParser and adjusts the token ranges of AST nodes
+     * so that leading and trailing whitespace tokens are not included in the node.
      */
     @Override
     public @NotNull ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder) {

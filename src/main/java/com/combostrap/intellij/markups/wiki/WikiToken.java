@@ -17,4 +17,5 @@ public class WikiToken extends IElementType {
     public String toString() {
         return "WikiTokenType." + super.toString();
     }
+
 }

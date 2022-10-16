@@ -52,8 +52,6 @@ public class MarkupLexer extends LexerBase {
         builder.addPattern(Pattern.regex("===="), WIKI_HEADING_3);
         builder.addPattern(Pattern.regex("==="), WIKI_HEADING_4);
         builder.addPattern(Pattern.regex("\r|\n|\r\n"), EOL);
-        builder.addPattern(Pattern.regex("[^\r\n]*"), TEXT);
-        //  builder.addPattern(Pattern.regex("[ \t\f]"), WS);
         DfaAmbiguityResolver<Integer> dfaAmbiguityResolver = integers -> integers
                 .stream().max(Integer::compare)
                 .orElse(null);
