@@ -1,4 +1,4 @@
-# Features (Connection point)
+# Intellij plugin (Extension point)
 
 
 ## Extensions
@@ -8,7 +8,11 @@ https://plugins.jetbrains.com/docs/intellij/plugin-extensions.html#declaring-ext
 
 You need to dig into: https://plugins.jetbrains.com/intellij-platform-explorer/extensions
 
-## Module
+[OpenApi](https://github.com/JetBrains/intellij-community/tree/master/platform/platform-api/src/com/intellij/openapi)
+contains all extension point
+
+## Structure 
+### Module
 
 
 | com.intellij.modules.platform | Messaging, Themes, UI Components, Files, Documents, Actions, Components, Services, Extensions, Editors |
@@ -18,18 +22,29 @@ You need to dig into: https://plugins.jetbrains.com/intellij-platform-explorer/e
 | com.intellij.modules.xdebugger | Debug Session, Stack Frames, Break Points, Source Positions, Memory Views, Tracked Instances |
 
 
-## Program Structure Interface (PSI)
+### Program Structure Interface (PSI)
 
-The Program Structure Interface, commonly referred to as just PSI, 
-is the layer in the IntelliJ Platform responsible for parsing files 
+The Program Structure Interface, commonly referred to as just PSI,
+is the layer in the IntelliJ Platform responsible for parsing files
 and creating the syntactic and semantic code model that powers so many of the platform's features
 
-A ASTNode is node in the AST tree. The AST is an intermediate parsing tree created by PsiBuilder, 
+A ASTNode is node in the AST tree. The AST is an intermediate parsing tree created by PsiBuilder,
 out of which a PSI tree is then created.
 
 https://plugins.jetbrains.com/docs/intellij/psi.html
 
-## Language Injection (MultiHostInjector)
+## Extension List
+
+
+List of interesting plugin
+
+### fileEditorProvider 
+fileEditorProvider extension (WeighedFileEditorProvider) - [Markdown Editor](https://github.com/shuzijun/markdown-editor)
+managed by the FileEditorManager
+
+
+
+### Language Injection (MultiHostInjector)
 Language Injection: allows you to have syntax highlighting for one language into another, 
 such as having syntax highlighting for SQL inside a String when editing a java file.
 
@@ -45,3 +60,12 @@ These injected fragments are treated by the IDE as separate tiny files in a spec
 
 Example: 
 
+
+## Install
+
+https://plugins.jetbrains.com/docs/intellij/custom-language-support-tutorial.html
+
+* `Ctrl+Alt+S`: Plugin: Install:
+    * `Grammar-Kit`: Adds BNF Grammars files editing support, and a parser/PSI code generator.
+    * `PsiViewer` : view the PSI tree
+* Create an empty IntelliJ Platform Plugin project or start using IntelliJ Platform Plugin Template when creating a plugin hosted on GitHub.

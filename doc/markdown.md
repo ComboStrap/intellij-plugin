@@ -5,6 +5,41 @@
 
 Markdown can't really be parsed with a LR parser.
 
+Note: a parser needs to be:
+* incremental (to quickly update when the document changes without re-parsing the entire text)
+* error-tolerant (highlighting doesn't break when you have a syntax error somewhere in your file)
+* practical (ie produces a syntax tree in a format that the highlighter can consume)
+
+Parsing constraints [Ref](https://marijnhaverbeke.nl/blog/lezer.html):
+  * the document is constantly changing.
+  * you can't do anything expensive. If the parsing works takes too long, it'll introduce latency that makes editing feel sluggish and unresponsive.
+  * The input is often not in a finished, syntactically correct form. But you still have to make some sense of it—nobody wants an editor where most features stop working when you have a syntax error in your document.
+  * You often want to be able to mix several languages/grammars in a single document (think HTML with JavaScript and CSS embedded in it).
+
+The state must be copyable, so that the editor can strategically store tokenizer states 
+from a previous run, and after a change, resume one close to that change to avoid re-tokenizing the entire document.
+Because we are usually only interested in the code in the visible viewport, this means the complexity of re-tokenizing is bounded by the distance between the change and the end of the viewport. Since most changes happen inside of that viewport, this works well in practice.
+
+
+Once you get past trivial grammars (where their declarative simplicity does look really nice), 
+they don't really help that much with abstraction. 
+Manually designing complicated state machines is a chore. 
+Regular expressions, which are bad enough on their own, become downright [terrifying](https://github.com/jeff-hykin/cpp-textmate-grammar/blob/e7b680238e59a87231322159749d74351c9d774a/syntaxes/cpp.tmLanguage.yaml#L264) 
+when you have to construct all your edges out of them, often stuffing multiple tokens into a single expression to avoid creating intermediate states. This “abstraction” has a tendency to produce uglier, less maintainable code than what you'd get when writing the tokenizer as plain code.
+
+Classical parser generators based on context-free grammars were never going to work in this context
+When you need to implement something like automatic semicolon insertion or whitespace-sensitivity, which would be a couple of lines of code in a handwritten grammar, you can't express that directly, and have to somehow escape the context-free abstraction.
+
+[TreeSitter](http://tree-sitter.github.io/tree-sitter/) is a parser system written with the code editor use case in mind
+
+A strict separation between the tokenizer and parser is problematic.
+But just because this type of parser is traditionally ran with a completely separate tokenizer doesn't mean it has to be. Having the parse state drive the tokenizer is largely unproblematic. You can even have the parser generator set this up automatically, without user involvement.
+
+A naively generated LR parser is huge, and many tools spit out embarrassingly big files (due to the state machine map)
+But with careful parser state deduplication and table compression such a parser can be made about as compact as a hand-written one.
+
+https://marijnhaverbeke.nl/blog/lezer.html#error-recovery
+
 ### CommonMark parsing
 
 Any lines not claimed by some block parser are claimed by the core ParagraphParser.
@@ -30,9 +65,7 @@ The parser parses in three stages with their own state machines:
 ## Library
 ### FlexMark
 
-https://github.com/vsch/flexmark-java
-
-flexmark-java is a Java implementation of CommonMark (spec 0.28) parser using the blocks first,
+[flexmark-java](https://github.com/vsch/flexmark-java) is a Java implementation of CommonMark (spec 0.28) parser using the blocks first,
 inlines after Markdown parsing architecture.
 
 It is a fork of [commonmark-java project](https://github.com/commonmark/commonmark-java), modified to generate an AST which reflects all the elements in the original source, full source position tracking for all elements in the AST and easier JetBrains Open API PsiTree generation.
@@ -45,7 +78,41 @@ The [lexer code](https://github.com/JetBrains/markdown/blob/master/src/commonMai
 
 ### Lezer (CodeMirror)
 
-  * https://github.com/lezer-parser/markdown
+[Markdown package](https://codemirror.net/examples/lang-package/) that wraps the [parser](https://github.com/lezer-parser/markdown) (that extends the [parser class](https://lezer.codemirror.net/docs/ref/#common.Parser))
+
+A lot of CodeMirror features are only available through its [API](https://codemirror.net/5/doc/manual.html#api). Thus, you need to write code 
+(or use [addons](https://codemirror.net/5/doc/manual.html#addons)) 
+if you want to expose them to your users.  
+
+Minimal editor [Ref](https://codemirror.net/docs/guide/):
+```javascript
+import {EditorState} from "@codemirror/state"
+import {EditorView, keymap} from "@codemirror/view"
+import {defaultKeymap} from "@codemirror/commands"
+
+let startState = EditorState.create({
+doc: "Hello World",
+extensions: [keymap.of(defaultKeymap)]
+})
+
+let view = new EditorView({
+state: startState,
+parent: document.body
+})
+```
+
+
+Javascript with the [codemirror bundle](https://codemirror.net/docs/ref/#codemirror0)
+
+```javascript
+import {EditorView, basicSetup} from "codemirror"
+import {javascript} from "@codemirror/lang-javascript"
+
+let view = new EditorView({
+  extensions: [basicSetup, javascript()],
+  parent: document.body
+})
+```
 
 ### Unified (Remark)
 
