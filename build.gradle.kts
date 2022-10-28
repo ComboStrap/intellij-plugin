@@ -20,6 +20,10 @@ version = properties("pluginVersion")
 
 dependencies {
     implementation("com.nobigsoftware:dfalex:1.0.1")
+    // https://github.com/google/re2j
+    // https://mvnrepository.com/artifact/com.google.re2j/re2j
+    runtimeOnly("com.google.re2j:re2j:1.7")
+    testImplementation("com.google.re2j:re2j:1.7")
 }
 
 sourceSets["main"].java.srcDirs("src/main/gen")

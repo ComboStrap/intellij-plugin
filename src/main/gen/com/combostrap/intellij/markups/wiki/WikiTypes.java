@@ -15,6 +15,9 @@ public interface WikiTypes {
   IElementType KEY = new WikiToken("KEY");
   IElementType SEPARATOR = new WikiToken("SEPARATOR");
   IElementType VALUE = new WikiToken("VALUE");
+  IElementType TEXT = new WikiToken("TEXT");
+  IElementType CAT = new WikiToken("CAT");
+  IElementType DOG = new WikiToken("DOG");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
